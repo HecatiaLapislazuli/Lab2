@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <constant name="struts.devMode" value="${env.STRUTS_DEV_MODE:false}"/>
+    <constant name="struts.action.extension" value=","/>
+    <constant name="struts.ui.theme" value="simple"/>
+    <package name="default" namespace="/" extends="struts-default">
+        <action name="books" class="org.moandor.se2.QueryBooksAction" method="execute">
+            <result name="success">/BookTitles.jsp</result>
+            <result name="error">/NoBooksByAuthor.jsp</result>
+        </action>
+        <action name="book_details" class="org.moandor.se2.BookDetailsAction" method="execute">
+            <result name="success">/BookDetails.jsp</result>
+            <result name="error">/BookNotFound.jsp</result>
+        </action>
+        <action name="delete_book" class="org.moandor.se2.DeleteBookAction" method="execute">
+            <interceptor-ref name="token"/>
+            <interceptor-ref name="defaultStack"/>
+            <result type="redirect">
+                <param name="location">/info_notice</param>
+                <param name="next">/</param>
+                <param name="title">Successfully Deleted</param>
+                <param name="strong">Success!</param>
+                <param name="message">Book successfully deleted.</param>
+                <param name="linkName">home</param>
+            </result>
+        </action>
+        <action name="add_book" class="org.moandor.se2.AddOrUpdateBookViewAction" method="execute">
+            <result>/AddBook.jsp</result>
+        </action>
+        <action name="add_book_post" class="org.moandor.se2.AddBookAction" method="execute">
+            <interceptor-ref name="token"/>
+            <interceptor-ref name="defaultStack"/>
+            <result type="redirect">
+                <param name="location">/info_notice</param>
+                <param name="next">/</param>
+                <param name="title">Successfully Added</param>
+                <param name="strong">Success!</param>
+                <param name="message">Book successfully added.</param>
+                <param name="linkName">home</param>
+            </result>
+            <result name="input">/AddBook.jsp</result>
+        </action>
+        <action name="add_author" class="org.moandor.se2.AddAuthorViewAction" method="execute">
+            <result>/AddAuthor.jsp</result>
+        </action>
+        <action name="add_author_post" class="org.moandor.se2.AddAuthorAction" method="execute">
+            <interceptor-ref name="token"/>
+            <interceptor-ref name="defaultStack"/>
+            <result>/AuthorAddedBack.jsp</result>
+        </action>
+        <action name="update_book" class="org.moandor.se2.AddOrUpdateBookViewAction"
+                method="execute">
+            <result type="redirect">
+                <param name="location">/info_notice</param>
+                <param name="next">/</param>
+                <param name="title">Successfully Updated</param>
+                <param name="strong">Success!</param>
+                <param name="message">Book successfully updated.</param>
+                <param name="linkName">home</param>
+            </result>
+        </action>
+        <action name="update_book_post" class="org.moandor.se2.UpdateBookAction" method="execute">
+            <interceptor-ref name="token"/>
+            <interceptor-ref name="defaultStack"/>
+            <result type="redirect">book_details?isbn=${isbn}</result>
+        </action>
+        <action name="info_notice" class="org.moandor.se2.InfoNoticeAction" method="execute">
+            <result>/InfoNotice.jsp</result>
+        </action>
+    </package>
+    <package name="api" namespace="/api" extends="json-default">
+        <action name="all_authors" class="org.moandor.se2.ApiAllAuthorsAction" method="execute">
+            <result type="json">
+                <param name="noCache">true</param>
+                <param name="excludeNullProperties">true</param>
+                <param name="root">authors</param>
+            </result>
+        </action>
+    </package>
+</struts>

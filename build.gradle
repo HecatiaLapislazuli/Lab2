@@ -1,0 +1,19 @@
+group 'org.moandor'
+version '1.0.0'
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.struts', name: 'struts2-core', version: '2.5.+'
+    compile group: 'org.apache.struts', name: 'struts2-json-plugin', version: '2.5.+'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.+'
+    compile files('libs/mysql-connector-java-5.1.44-bin.jar')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
